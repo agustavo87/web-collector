@@ -1,0 +1,30 @@
+{
+    "name": "agustavo87/moodle-collector",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "AGustavo87\\WebCollector\\": "src/",
+            "Tests\\": "tests/"
+        },
+        "files": ["src/functions.php"]
+    },
+    "authors": [
+        {
+            "name": "Gustavo R. Ayala",
+            "email": "agustavo87@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^8",
+        "giberti/phpunit-local-server": "^2.1",
+        "behat/mink": "^1.10",
+        "behat/mink-goutte-driver": "^2.0"
+    },
+    "scripts": {
+        "test":  [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --testdox"
+        ],
+        "serve": "php -S localhost:8000 -t public router.php"
+    }
+}

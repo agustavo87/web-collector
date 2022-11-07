@@ -1,0 +1,6 @@
+*
+!.gitignore
+!forum/
+!pages/
+!session/
+!students/

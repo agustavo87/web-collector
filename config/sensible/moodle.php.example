@@ -1,0 +1,17 @@
+<?php
+return [
+    'defaults' => [
+        'login_url' => 'https://moodlewebsite.edu/campus/login/index.php',
+        'username' => 'john.doe@moodlewebsite.edu.ar',
+        'password' => 'password',
+        'session_test' => 'https://moodlewebsite.edu/campus/login/index.php?testsession=5090',
+        'home'  => 'https://moodlewebsite.edu/campus/my/',
+        'course_id' => '9999',
+        'course_url' => 'https://moodlewebsite.edu/campus/user/index.php?id={COURSE_ID}'
+        'students_info_url' => 'https://moodlewebsite.edu/campus/mod/forum/user.php?id={USER_ID}&course={COURSE_ID}',
+        'login_token_xpath' => '//input[@name=\'logintoken\']',
+        'moodle_session_cookie_name' => 'MoodleSession',
+        'moodle_id_cookie_name' => 'MOODLEID1_',
+        'user_agent' => 'Mozilla/5.0'
+    ]
+];

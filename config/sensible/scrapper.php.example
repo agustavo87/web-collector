@@ -1,0 +1,7 @@
+<?php
+return [
+    'defaults' => [
+        'xpath' => '//img',
+        'url'   => 'https://www.somesite.com'
+    ]
+];
