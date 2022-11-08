@@ -8,6 +8,7 @@ use AGustavo87\WebCollector\View;
 use AGustavo87\WebCollector\Request;
 use AGustavo87\WebCollector\Services\DocumentManager;
 use AGustavo87\WebCollector\Services\Storage;
+use AGustavo87\WebCollector\Services\HttpClient\Client as HTTPClient;
 
 class ScrapperController extends Controller
 {
@@ -20,7 +21,17 @@ class ScrapperController extends Controller
         parent::__construct($request, $app);
         $this->request = $request;
         $this->store = new Storage('pages');
-        $this->DocumentManager = new DocumentManager($this->store);
+        $this->DocumentManager = new DocumentManager(
+            $this->store,
+            new HTTPClient([
+                'http' => [
+                    'method' => 'GET',
+                    'user_agent' => 'Mozilla/5.0',
+                    'follow_location' => 1,
+                    'ignore_errors' => true,
+                ]
+            ])
+        );
         $this->defaults = $app->config('scrapper.defaults');
     }
 
@@ -38,10 +49,8 @@ class ScrapperController extends Controller
     public function meta(): View
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
-        $urlData = $this->DocumentManager->getUrlData($url);
-        $urlData['cookies'] = $this->DocumentManager->getCookieData($urlData['headers']);
         return new View('meta', [
-            'data' => $urlData,
+            'data' => $this->DocumentManager->getUrlData($url)->toArray(),
             'url' => $url,
         ]);
     }
@@ -64,8 +73,8 @@ class ScrapperController extends Controller
         [$page_uid, $response] =  $this->DocumentManager->fetchAndStorePage($url);
         return new View('grab', [
             'data' => [
-                'cookie' => $response['cookies'],
-                'headers' => $response['headers']
+                'cookie' => $response->cookies,
+                'headers' => $response->headers
             ],
             'url' => $url,
             'page_uid'   => $page_uid,

@@ -10,6 +10,7 @@ use AGustavo87\WebCollector\RedirectResponse;
 use AGustavo87\WebCollector\Services\DocumentManager;
 use AGustavo87\WebCollector\Services\MoodleClient;
 use AGustavo87\WebCollector\Services\Storage;
+use AGustavo87\WebCollector\Services\HttpClient\Client as HTTPClient;
 
 class MoodleScrapController extends Controller
 {
@@ -25,7 +26,15 @@ class MoodleScrapController extends Controller
         $this->defaults = $app->config('moodle.defaults');
         $this->moodle = new MoodleClient(
             new DocumentManager(
-                new Storage('pages')
+                new Storage('pages'),
+                new HTTPClient([
+                    'http' => [
+                        'method' => 'GET',
+                        'user_agent' => 'Mozilla/5.0',
+                        'follow_location' => 1,
+                        'ignore_errors' => true,
+                    ]
+                ])
             ),
             $request->getParam('login_url', $this->defaults['login_url']),
             $request->getParam('in_session',  $app->session()->get('in_session')),
@@ -84,8 +93,8 @@ class MoodleScrapController extends Controller
         return new JSONResponse([
             'page_uid'   => $page_uid,
             'data' => [
-                'cookies' => $response['cookies'],
-                'headers'=> $response['headers']
+                'cookies' => $response->cookies,
+                'headers'=> $response->headers
             ]
         ], 200);
     }

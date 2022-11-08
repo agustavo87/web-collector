@@ -2,6 +2,8 @@
 
 namespace AGustavo87\WebCollector\Services;
 
+use AGustavo87\WebCollector\Services\HttpClient\Response;
+
 class MoodleClient
 {
     protected DocumentManager $documentManager;
@@ -53,12 +55,12 @@ class MoodleClient
                                     ]
                                 ]
                             ])
-                             ->getResponseData($this->login_url)['cookies'][$this->moodleSessionCookieName][0]['value'];
+                             ->getResponseData($this->login_url)->cookies[$this->moodleSessionCookieName][0]['value'];
     
         $login_token = $this->documentManager
-                                  ->query($this->loginTokenXpath)
-                                  ->result()->item(0)->attributes
-                                  ->getNamedItem('value')->nodeValue;
+                                ->query($this->loginTokenXpath)
+                                ->result()->item(0)->attributes
+                                ->getNamedItem('value')->nodeValue;
 
         return [
             'login_url' => $login_url,
@@ -108,8 +110,8 @@ class MoodleClient
         $response = $this->documentManager->setContext($opts)
                                           ->getResponseData($this->login_url);
 
-        $this->in_session = $response['cookies'][$this->moodleSessionCookieName][0]['value'];
-        $this->moodle_id = $response['cookies'][$this->moodleIdCookieName][1]['value'];
+        $this->in_session = $response->cookies[$this->moodleSessionCookieName][0]['value'];
+        $this->moodle_id = $response->cookies[$this->moodleIdCookieName][1]['value'];
         
         return [
             'in_session' => $this->in_session,
@@ -126,9 +128,9 @@ class MoodleClient
      * Returns 'body', 'cookies', and 'headers' of the response of a url.
      *
      * @param string $url
-     * @return array
+     * @return Response
      */
-    public function fetch($url): array
+    public function fetch($url): Response
     {
         return $this->documentManager->getResponseData($url);
     }
