@@ -12,9 +12,9 @@ class JSONResponse extends Response
         'Content-Type' => 'application/json'
     ];
 
-    public function __construct(array $data, int $status, array $headers = [])
+    public function __construct(Request $request, array $data, int $status, array $headers = [])
     {
-        parent::__construct($status, $headers);
+        parent::__construct($request, $status, $headers);
         $this->data = $data;
     }
 
@@ -23,7 +23,7 @@ class JSONResponse extends Response
         return json_encode($this->data);
     }
 
-    public function commit(Request $request): static
+    public function commit(): static
     {
         $this->setMetaData();
         $body = $this->build();

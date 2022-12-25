@@ -51,7 +51,7 @@ class MoodleScrapController extends Controller
         );
         $this->app->session()->set('in_session', $in_session);
         $this->app->session()->set('moodle_id', $moodle_id);
-        return new JSONResponse([
+        return new JSONResponse($this->request, [
             'in_session' => $in_session,
             'moodle_id'  => $moodle_id
         ], 200);
@@ -59,7 +59,7 @@ class MoodleScrapController extends Controller
 
     public function showAuthenticate(): ViewResponse
     {
-        return new ViewResponse('authenticate', [
+        return new ViewResponse($this->request, 'authenticate', [
             'login_url'     => $this->request->getParam('login_url', $this->defaults['login_url']),
             'username'      => $this->request->getParam('username', $this->defaults['username']),
             'password'      => $this->request->getParam('password', $this->defaults['password']),
@@ -71,9 +71,9 @@ class MoodleScrapController extends Controller
         $in_session = $this->request->getParam('in_session', $this->app->session()->get('in_session'));
         $moodle_id = $this->request->getParam('moodle_id', $this->app->session()->get('moodle_id'));
         if(!$in_session || !$moodle_id) {
-            return new RedirectResponse('/moodle/authenticate');
+            return new RedirectResponse($this->request, '/moodle/authenticate');
         }
-        return new ViewResponse('moodlegrab', [
+        return new ViewResponse($this->request, 'moodlegrab', [
             'url'            => $this->request->getParam('url', $this->defaults['home']),
             'in_session'     => $in_session,
             'moodle_id'      => $moodle_id,
@@ -85,7 +85,7 @@ class MoodleScrapController extends Controller
         [$page_uid, $response] =  $this->moodle->fetchAndStore(
             $this->request->getParam('url', '')
         );
-        return new JSONResponse([
+        return new JSONResponse($this->request, [
             'page_uid'   => $page_uid,
             'data' => [
                 'cookies' => $response->cookies,
@@ -100,7 +100,7 @@ class MoodleScrapController extends Controller
         $in_session = $this->request->getParam('in_session', $this->app->session()->get('in_session'));
         $moodle_id = $this->request->getParam('moodle_id', $this->app->session()->get('moodle_id'));
         if(!$in_session || !$moodle_id) {
-            return new RedirectResponse('/moodle/authenticate');
+            return new RedirectResponse($this->request, '/moodle/authenticate');
         }
 
         $students = $this->getStudentsInfo($course_id);
@@ -113,7 +113,7 @@ class MoodleScrapController extends Controller
             ['id', 'role', 'name', 'email', 'profile_link']
         );
 
-        return new ViewResponse('studentsinfo', [
+        return new ViewResponse($this->request, 'studentsinfo', [
             'course_id' => $course_id,
             'in_session' => $in_session,
             'moodle_id' => $moodle_id,
@@ -127,7 +127,7 @@ class MoodleScrapController extends Controller
         $in_session = $this->request->getParam('in_session', $this->app->session()->get('in_session'));
         $moodle_id = $this->request->getParam('moodle_id', $this->app->session()->get('moodle_id'));
         if(!$in_session || !$moodle_id) {
-            return new RedirectResponse('/moodle/authenticate');
+            return new RedirectResponse($this->request, '/moodle/authenticate');
         }
 
         $results = [];
@@ -153,7 +153,7 @@ class MoodleScrapController extends Controller
             ['course_id', 'user_id', 'name', 'time', 'content', 'length_chars', 'length_words']
         );
 
-        return new ViewResponse('forumparticipations', [
+        return new ViewResponse($this->request, 'forumparticipations', [
             'course_id' => $course_id,
             'in_session' => $in_session,
             'moodle_id' => $moodle_id,

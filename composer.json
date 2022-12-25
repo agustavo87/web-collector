@@ -6,7 +6,7 @@
             "AGustavo87\\WebCollector\\": "src/",
             "Tests\\": "tests/"
         },
-        "files": ["src/functions.php"]
+        "files": ["src/Support/functions.php"]
     },
     "authors": [
         {

@@ -56,12 +56,10 @@ class Router
      */
     public function handle(Request $request): Response
     {
-        $method = $this->routes[$request->getMethod()];
-
         if (!key_exists($request->getMethod(), $this->routes)) {
             return $this->nullMethod();
         }
-
+        
         $method = $this->routes[$request->getMethod()];
         
         if (!key_exists($request->getPath(), $method)) {
@@ -73,18 +71,19 @@ class Router
         if($params['use'] == 'callable') {
             return $params['call']();
         }
+
         $controller = new $params['use']($request, $this->app);
         return call_user_func([$controller, $params['call']]);
     }
 
-    protected function nullMethod()
+    protected function nullMethod(): Response
     {
-        return new NotFoundResponse();
+        return new NotFoundResponse($this->app->getRequest());
     }
 
-    protected function pathNotFountd()
+    protected function pathNotFountd(): Response
     {
-        return new NotFoundResponse();
+        return new NotFoundResponse($this->app->getRequest());
     }
 
     /**

@@ -3,14 +3,12 @@
 namespace AGustavo87\WebCollector\Controllers;
 
 use AGustavo87\WebCollector\Responses\ViewResponse;
-
-use AGustavo87\WebCollector\ViewModels\Welcome as WelcomeView;
+use AGustavo87\WebCollector\Responses\ViewModels\Welcome;
 
 class PresentController extends Controller
 {
     public function present(): ViewResponse
     {
-        $view = new WelcomeView($this->app->router());
-        return $view;
+        return new Welcome($this->request, $this->app->router());
     }
 }

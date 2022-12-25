@@ -2,9 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-use AGustavo87\WebCollector\App;
-use AGustavo87\WebCollector\Request;
+use AGustavo87\WebCollector\{App, Request};
 
-$request = Request::fromCapture();
-$app = new App($request);
-$app->run()->commit($request);
+$app = new App(Request::fromCapture());
+$app->run()->commit();

@@ -25,6 +25,16 @@ class App
         $this->session = new Session(dirname(__FILE__,2) . DIRECTORY_SEPARATOR . 'storage/session');
     }
 
+    protected function registerStores()
+    {
+        foreach ($this->config('storage.stores') as $store) {
+            Storage::createDisk([
+                'name'  => $store['name'],
+                'root'  => $store['root']
+            ]);
+        }
+    }
+
     public function router(): Router
     {
         return $this->router;
@@ -40,18 +50,13 @@ class App
         return ($this->config)($path);
     }
 
-    protected function registerStores()
-    {
-        foreach ($this->config('storage.stores') as $store) {
-            Storage::createDisk([
-                'name'  => $store['name'],
-                'root'  => $store['root']
-            ]);
-        }
-    }
-
     public function run(): Response
     {
         return $this->router->handle($this->request);
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 }

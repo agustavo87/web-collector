@@ -46,6 +46,6 @@ class FindController
     {
         self::$calls++;
         Assert::assertTrue($this->request->getParam('key') == 'value', 'the key value is not as expected.');
-        return new Response();
+        return new Response($this->request);
     }
 }

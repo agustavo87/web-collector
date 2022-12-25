@@ -36,7 +36,7 @@ class ScrapperController extends Controller
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
         $tag = $this->request->getParam('tag', 'img');
-        return new ViewResponse('scrap', [
+        return new ViewResponse($this->request, 'scrap', [
             'tags' => $this->DocumentManager->getTags($url, $tag),
             'url' => $url,
             'tag' => $tag
@@ -46,7 +46,7 @@ class ScrapperController extends Controller
     public function meta(): ViewResponse
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
-        return new ViewResponse('meta', [
+        return new ViewResponse($this->request, 'meta', [
             'data' => $this->DocumentManager->getUrlData($url)->toArray(),
             'url' => $url,
         ]);
@@ -61,14 +61,14 @@ class ScrapperController extends Controller
         if(!$uid || !$body) {
             $body = 'Nothing found';
         }
-        return new ViewResponse('raw', compact('body'));
+        return new ViewResponse($this->request, 'raw', compact('body'));
     }
 
     public function grab(): ViewResponse
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
         [$page_uid, $response] =  $this->DocumentManager->fetchAndStorePage($url);
-        return new ViewResponse('grab', [
+        return new ViewResponse($this->request, 'grab', [
             'data' => [
                 'cookie' => $response->cookies,
                 'headers' => $response->headers
@@ -87,13 +87,13 @@ class ScrapperController extends Controller
     {
         $page_uid = $this->request->getParam('page_uid', null);
         if(!$page_uid) {
-            return new  JSONResponse([
+            return new  JSONResponse($this->request, [
                 'error'  => 'The page_uid is required',
             ], 400);
         }
         $xpath = $this->request->getParam('xpath', null);
         if(!$page_uid) {
-            return new  JSONResponse([
+            return new  JSONResponse($this->request, [
                 'error'  => 'The xpath field is required',
             ], 400);
         }
@@ -103,7 +103,7 @@ class ScrapperController extends Controller
                          ->query($xpath)
                          ->getElementsArray();
 
-        return new  JSONResponse([
+        return new  JSONResponse($this->request, [
             'page_uid'  => $page_uid,
             'xpath'     => $xpath,
             'elements'  => $elements
@@ -112,7 +112,7 @@ class ScrapperController extends Controller
 
     public function analize(): ViewResponse
     {
-        return new ViewResponse('analize', [
+        return new ViewResponse($this->request, 'analize', [
             'page_uid' => $this->request->getParam('page_uid', ''),
             'xpath' => $this->request->getParam('xpath', '/')
         ]);

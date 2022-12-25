@@ -6,11 +6,13 @@ use AGustavo87\WebCollector\Request;
 
 class Response
 {
+    protected Request $request;
     protected ?int $status = null;
     protected array $headers =  [];
 
-    public function __construct(int $status = 200, array $headers = [])
+    public function __construct(Request $request, int $status = 200, array $headers = [])
     {
+        $this->request = $request;
         $this->status = $status;
         $this->headers = array_merge($this->headers, $headers);
     }
@@ -35,7 +37,7 @@ class Response
         }
     }
 
-    public function commit(Request $request): static
+    public function commit(): static
     {
         $this->setMetaData();
         return $this;
