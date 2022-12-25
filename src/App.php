@@ -3,6 +3,7 @@
 namespace AGustavo87\WebCollector;
 
 use AGustavo87\WebCollector\Services\Storage;
+use AGustavo87\WebCollector\Responses\Response;
 
 class App
 {

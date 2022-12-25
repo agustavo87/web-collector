@@ -1,6 +1,7 @@
 <?php
 
 namespace AGustavo87\WebCollector;
+use AGustavo87\WebCollector\Responses\{Response, NotFoundResponse};
 
 class Router
 {

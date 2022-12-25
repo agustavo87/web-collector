@@ -1,13 +1,9 @@
 <?php
-
 namespace Tests\Unit;
 
-use AGustavo87\WebCollector\App;
-use AGustavo87\WebCollector\Request;
-use AGustavo87\WebCollector\Response;
-use AGustavo87\WebCollector\Router;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\TestCase;
+use AGustavo87\WebCollector\{App, Request, Router};
+use AGustavo87\WebCollector\Responses\Response;
+use PHPUnit\Framework\{Assert, TestCase};
 
 class RouterTest extends TestCase
 {

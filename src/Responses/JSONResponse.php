@@ -1,6 +1,8 @@
 <?php
 
-namespace AGustavo87\WebCollector;
+namespace AGustavo87\WebCollector\Responses;
+
+use AGustavo87\WebCollector\Request;
 
 class JSONResponse extends Response
 {

@@ -55,7 +55,7 @@ class MoodleClient
                                     ]
                                 ]
                             ])
-                             ->getResponseData($this->login_url)->cookies[$this->moodleSessionCookieName][0]['value'];
+                             ->getUrl($this->login_url)->cookies[$this->moodleSessionCookieName][0]['value'];
     
         $login_token = $this->documentManager
                                 ->query($this->loginTokenXpath)
@@ -83,7 +83,6 @@ class MoodleClient
             'out_session'   => $out_session
         ] = $this->getLoginAttemptRequirements();
 
-
         $postdata = http_build_query([
                 'username' => $username,
                 'password' => $password,
@@ -91,7 +90,7 @@ class MoodleClient
                 'logintoken' =>  $login_token
         ]);
 
-         $opts = [
+        $response = $this->documentManager->setContext([
             'http' =>[
                 'method' => 'POST',
                 'user_agent' => $this->userAgent,
@@ -104,11 +103,7 @@ class MoodleClient
                 ],
                 'content' => $postdata
             ]
-        ];
-
-
-        $response = $this->documentManager->setContext($opts)
-                                          ->getResponseData($this->login_url);
+        ])->getUrl($this->login_url);
 
         $this->in_session = $response->cookies[$this->moodleSessionCookieName][0]['value'];
         $this->moodle_id = $response->cookies[$this->moodleIdCookieName][1]['value'];
@@ -132,7 +127,7 @@ class MoodleClient
      */
     public function fetch($url): Response
     {
-        return $this->documentManager->getResponseData($url);
+        return $this->documentManager->getUrl($url);
     }
 
     public function getDocumentManager(): DocumentManager

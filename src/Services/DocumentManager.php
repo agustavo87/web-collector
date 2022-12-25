@@ -7,8 +7,10 @@ use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Exception;
-use AGustavo87\WebCollector\Services\HttpClient\Client as HTTPClient;
-use AGustavo87\WebCollector\Services\HttpClient\Response;
+use AGustavo87\WebCollector\Services\HttpClient\{
+    Client as HTTPClient, 
+    Response
+};
 
 class DocumentManager
 {

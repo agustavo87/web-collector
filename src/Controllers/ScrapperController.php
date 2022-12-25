@@ -2,12 +2,9 @@
 
 namespace AGustavo87\WebCollector\Controllers;
 
-use AGustavo87\WebCollector\App;
-use AGustavo87\WebCollector\JSONResponse;
-use AGustavo87\WebCollector\View;
-use AGustavo87\WebCollector\Request;
-use AGustavo87\WebCollector\Services\DocumentManager;
-use AGustavo87\WebCollector\Services\Storage;
+use AGustavo87\WebCollector\{App, Request};
+use AGustavo87\WebCollector\Responses\{JSONResponse, ViewResponse};
+use AGustavo87\WebCollector\Services\{DocumentManager, Storage};
 use AGustavo87\WebCollector\Services\HttpClient\Client as HTTPClient;
 
 class ScrapperController extends Controller
@@ -35,27 +32,27 @@ class ScrapperController extends Controller
         $this->defaults = $app->config('scrapper.defaults');
     }
 
-    public function scrap(): View
+    public function scrap(): ViewResponse
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
         $tag = $this->request->getParam('tag', 'img');
-        return new View('scrap', [
+        return new ViewResponse('scrap', [
             'tags' => $this->DocumentManager->getTags($url, $tag),
             'url' => $url,
             'tag' => $tag
         ]);
     }
 
-    public function meta(): View
+    public function meta(): ViewResponse
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
-        return new View('meta', [
+        return new ViewResponse('meta', [
             'data' => $this->DocumentManager->getUrlData($url)->toArray(),
             'url' => $url,
         ]);
     }
 
-    public function stored(): View
+    public function stored(): ViewResponse
     {
         $uid = $this->request->getParam('uid', null);
         if($uid) {
@@ -64,14 +61,14 @@ class ScrapperController extends Controller
         if(!$uid || !$body) {
             $body = 'Nothing found';
         }
-        return new View('raw', compact('body'));
+        return new ViewResponse('raw', compact('body'));
     }
 
-    public function grab(): View
+    public function grab(): ViewResponse
     {
         $url = $this->request->getParam('url', $this->defaults['url']);
         [$page_uid, $response] =  $this->DocumentManager->fetchAndStorePage($url);
-        return new View('grab', [
+        return new ViewResponse('grab', [
             'data' => [
                 'cookie' => $response->cookies,
                 'headers' => $response->headers
@@ -113,9 +110,9 @@ class ScrapperController extends Controller
         ], 200);
     }
 
-    public function analize(): View
+    public function analize(): ViewResponse
     {
-        return new View('analize', [
+        return new ViewResponse('analize', [
             'page_uid' => $this->request->getParam('page_uid', ''),
             'xpath' => $this->request->getParam('xpath', '/')
         ]);

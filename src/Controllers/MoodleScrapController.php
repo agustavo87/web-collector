@@ -2,14 +2,9 @@
 
 namespace AGustavo87\WebCollector\Controllers;
 
-use AGustavo87\WebCollector\App;
-use AGustavo87\WebCollector\View;
-use AGustavo87\WebCollector\Request;
-use AGustavo87\WebCollector\JSONResponse;
-use AGustavo87\WebCollector\RedirectResponse;
-use AGustavo87\WebCollector\Services\DocumentManager;
-use AGustavo87\WebCollector\Services\MoodleClient;
-use AGustavo87\WebCollector\Services\Storage;
+use AGustavo87\WebCollector\{App, Request};
+use AGustavo87\WebCollector\Responses\{JSONResponse, RedirectResponse, ViewResponse};
+use AGustavo87\WebCollector\Services\{DocumentManager, MoodleClient, Storage};
 use AGustavo87\WebCollector\Services\HttpClient\Client as HTTPClient;
 
 class MoodleScrapController extends Controller
@@ -62,9 +57,9 @@ class MoodleScrapController extends Controller
         ], 200);
     }
 
-    public function showAuthenticate(): View
+    public function showAuthenticate(): ViewResponse
     {
-        return new View('authenticate', [
+        return new ViewResponse('authenticate', [
             'login_url'     => $this->request->getParam('login_url', $this->defaults['login_url']),
             'username'      => $this->request->getParam('username', $this->defaults['username']),
             'password'      => $this->request->getParam('password', $this->defaults['password']),
@@ -78,7 +73,7 @@ class MoodleScrapController extends Controller
         if(!$in_session || !$moodle_id) {
             return new RedirectResponse('/moodle/authenticate');
         }
-        return new View('moodlegrab', [
+        return new ViewResponse('moodlegrab', [
             'url'            => $this->request->getParam('url', $this->defaults['home']),
             'in_session'     => $in_session,
             'moodle_id'      => $moodle_id,
@@ -118,7 +113,7 @@ class MoodleScrapController extends Controller
             ['id', 'role', 'name', 'email', 'profile_link']
         );
 
-        return new View('studentsinfo', [
+        return new ViewResponse('studentsinfo', [
             'course_id' => $course_id,
             'in_session' => $in_session,
             'moodle_id' => $moodle_id,
@@ -158,7 +153,7 @@ class MoodleScrapController extends Controller
             ['course_id', 'user_id', 'name', 'time', 'content', 'length_chars', 'length_words']
         );
 
-        return new View('forumparticipations', [
+        return new ViewResponse('forumparticipations', [
             'course_id' => $course_id,
             'in_session' => $in_session,
             'moodle_id' => $moodle_id,

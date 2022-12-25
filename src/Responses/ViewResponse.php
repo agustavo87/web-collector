@@ -1,8 +1,10 @@
 <?php
 
-namespace AGustavo87\WebCollector;
+namespace AGustavo87\WebCollector\Responses;
 
-class View extends Response
+use AGustavo87\WebCollector\{HTMLView, Request};
+
+class ViewResponse extends Response
 {
     protected HTMLView $view;
 

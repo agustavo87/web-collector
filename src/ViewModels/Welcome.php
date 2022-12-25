@@ -3,9 +3,9 @@
 namespace AGustavo87\WebCollector\ViewModels;
 
 use AGustavo87\WebCollector\Router;
-use AGustavo87\WebCollector\View;
+use AGustavo87\WebCollector\Responses\ViewResponse;
 
-class Welcome extends View
+class Welcome extends ViewResponse
 {
     protected Router $router;
 

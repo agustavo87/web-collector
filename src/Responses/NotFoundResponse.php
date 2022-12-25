@@ -1,6 +1,6 @@
 <?php
 
-namespace AGustavo87\WebCollector;
+namespace AGustavo87\WebCollector\Responses;
 
 class NotFoundResponse extends Response
 {
